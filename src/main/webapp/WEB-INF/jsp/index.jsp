@@ -43,12 +43,15 @@
                 </div>
             </form>
 
-            <c:if test="${not empty processedFiles}">
+            <c:if test="${not empty files}">
                 <div class="processed-files">
                     <h3>Processed files</h3>
                     <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-01.jpg</a>
-                        <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-02.jpg</a>
+                        <c:forEach var="file" items="${files}">
+                            <a href="#" class="list-group-item list-group-item-success">
+                                <span class="badge alert-success pull-right"><c:out value="${file.fileName}"/></span>
+                            </a>
+                        </c:forEach>
                     </div>
                 </div>
             </c:if>
@@ -62,7 +65,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#js-upload-submit').on('submit', function() {
-            $('#js-upload-files').attr('disabled', 'disabled');
+            $('#js-upload-files').attr('disabled', 'disabled').val('Please wait');
             return true;
         });
     });
