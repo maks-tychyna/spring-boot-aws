@@ -1,6 +1,7 @@
 package com.maks.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
 import com.maks.service.AmazonS3Service;
@@ -43,10 +44,11 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @SneakyThrows
     private void putToBucket(File file, MultipartFile multipartFile) {
-        amazonS3Client.putObject(bucketName,
-                                file.getId().toString(),
-                                new ByteArrayInputStream(multipartFile.getBytes()),
-                                null);
+        PutObjectResult putObjectResult = amazonS3Client.putObject(bucketName,
+                                                                   file.getId().toString(),
+                                                                   new ByteArrayInputStream(multipartFile.getBytes()),
+                                                                   null);
+        System.out.println("test");
     }
 
 }
