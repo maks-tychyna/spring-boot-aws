@@ -1,6 +1,7 @@
 package com.maks.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
@@ -44,10 +45,13 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @SneakyThrows
     private void putToBucket(File file, MultipartFile multipartFile) {
+        ObjectMetadata meta = new ObjectMetadata();
+        meta.setContentLength(multipartFile.getBytes().length);
+
         PutObjectResult putObjectResult = amazonS3Client.putObject(bucketName,
                                                                    file.getId().toString(),
                                                                    new ByteArrayInputStream(multipartFile.getBytes()),
-                                                                   null);
+                                                                   meta);
         System.out.println("test");
     }
 
