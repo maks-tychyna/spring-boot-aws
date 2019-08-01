@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,10 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @SneakyThrows
     private void putToBucket(File file, MultipartFile multipartFile) {
-        amazonS3Client.putObject(bucketName, file.getId().toString(), multipartFile.getInputStream(), null);
+        amazonS3Client.putObject(bucketName,
+                                file.getId().toString(),
+                                new ByteArrayInputStream(multipartFile.getBytes()),
+                                null);
     }
 
 }

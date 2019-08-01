@@ -49,7 +49,8 @@
                     <div class="list-group">
                         <c:forEach var="file" items="${files}">
                             <a href="#" class="list-group-item list-group-item-success">
-                                <span class="badge alert-success pull-right"><c:out value="${file.fileName}"/></span>
+                                <span class="badge alert-success pull-right">Download</span>
+                                <c:out value="${file.fileName}"/>
                             </a>
                         </c:forEach>
                     </div>
