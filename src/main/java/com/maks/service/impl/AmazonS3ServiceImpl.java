@@ -1,7 +1,9 @@
 package com.maks.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
@@ -48,10 +50,11 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentLength(multipartFile.getBytes().length);
 
-        PutObjectResult putObjectResult = amazonS3Client.putObject(bucketName,
+        PutObjectResult putObjectResult = amazonS3Client.putObject(new PutObjectRequest(bucketName,
                                                                    file.getId().toString(),
                                                                    new ByteArrayInputStream(multipartFile.getBytes()),
-                                                                   meta);
+                                                                   meta)
+                                                        .withCannedAcl(CannedAccessControlList.PublicRead));
         System.out.println("test");
     }
 

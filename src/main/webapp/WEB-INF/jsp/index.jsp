@@ -37,7 +37,7 @@
             <form id="js-upload-submit" action="/" method="post" enctype="multipart/form-data">
                 <div class="form-inline">
                     <div class="form-group">
-                        <input type="file" name="files" multiple>
+                        <input id="js-upload-files-input" type="file" name="files" multiple>
                     </div>
                     <button type="submit" class="btn btn-sm btn-primary" id="js-upload-files">Upload files</button>
                 </div>
@@ -66,7 +66,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#js-upload-submit').on('submit', function() {
-            $('#js-upload-files').attr('disabled', 'disabled').val('Please wait');
+            $('#js-upload-files-input').attr('disabled', 'disabled');
+            $('#js-upload-files').attr('disabled', 'disabled').text('Please wait');
             return true;
         });
     });
