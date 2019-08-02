@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.*;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
 import com.maks.service.AmazonS3Service;
+import com.maks.service.AmazonSesService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +27,9 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Autowired
     private AmazonS3 amazonS3Client;
+
+    @Autowired
+    private AmazonSesService amazonSesService;
 
     @Autowired
     private FileRepository fileRepository;
@@ -43,13 +46,9 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Override
     public Long getBucketSize() {
-        List<S3ObjectSummary> objectSummaries = Optional.of(bucketName)
-                                                        .map(amazonS3Client::listObjects)
-                                                        .map(ObjectListing::getObjectSummaries)
-                                                        .orElseThrow(IllegalArgumentException::new);
-        return objectSummaries.stream()
-                              .mapToLong(S3ObjectSummary::getSize)
-                              .sum();
+        return getObjectSummaries().stream()
+                                   .mapToLong(S3ObjectSummary::getSize)
+                                   .sum();
     }
 
     @Override
@@ -65,7 +64,11 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
         Optional.of(multipartFile)
                 .map(File::new)
                 .map(fileRepository::save)
-                .ifPresent(storedFile -> putToBucket(storedFile, multipartFile));
+                .ifPresent(storedFile -> {
+                    putToBucket(storedFile, multipartFile);
+                    amazonSesService.sendMail("File '" + storedFile.getFileName() + "' was uploaded. " +
+                            "Bucket size now is " + getBucketSize() + " bytes.");
+                });
     }
 
     @SneakyThrows
@@ -78,6 +81,13 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
                                  new ByteArrayInputStream(multipartFile.getBytes()),
                                  meta)
                       .withCannedAcl(CannedAccessControlList.PublicRead));
+    }
+
+    private List<S3ObjectSummary> getObjectSummaries() {
+        return Optional.of(bucketName)
+                       .map(amazonS3Client::listObjects)
+                       .map(ObjectListing::getObjectSummaries)
+                       .orElseThrow(IllegalArgumentException::new);
     }
 
 }
