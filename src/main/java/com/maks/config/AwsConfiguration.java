@@ -1,8 +1,6 @@
 package com.maks.config;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,14 +19,6 @@ public class AwsConfiguration {
                                     .withCredentials(credentialsProvider)
                                     .withRegion(region)
                                     .build();
-    }
-
-    @Bean
-    public AmazonCloudWatch amazonCloudWatch(AWSCredentialsProvider credentialsProvider) {
-        return AmazonCloudWatchClientBuilder.standard()
-                                            .withCredentials(credentialsProvider)
-                                            .withRegion(region)
-                                            .build();
     }
 
 }
