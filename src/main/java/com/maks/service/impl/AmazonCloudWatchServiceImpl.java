@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -64,10 +65,16 @@ public class AmazonCloudWatchServiceImpl implements AmazonCloudWatchService {
     }
 
     private GetMetricDataRequest prepareMetricRequest(MetricDataQuery metricQuery) {
+        Date startTime = new Date();
+
+        Calendar endTime = Calendar.getInstance();
+        endTime.setTime(startTime);
+        endTime.add(Calendar.MINUTE, 1);
+
         return new GetMetricDataRequest()
                     .withMetricDataQueries(Collections.singleton(metricQuery))
-                    .withStartTime(new Date())
-                    .withEndTime(new Date());
+                    .withStartTime(startTime)
+                    .withEndTime(endTime.getTime());
     }
 
 }
