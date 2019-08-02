@@ -37,8 +37,7 @@
         <div class="panel-heading"><strong>Upload Files</strong> <small>to AWS S3</small></div>
         <div class="panel-body">
 
-            <!-- Standar Form -->
-            <h4>Select files from your computer</h4>
+            <h4>Select files from your computer and click Upload</h4>
             <form id="js-upload-submit" action="/" method="post" enctype="multipart/form-data">
                 <div class="form-inline">
                     <div class="form-group">
@@ -55,7 +54,7 @@
                         <c:forEach var="file" items="${files}">
                             <a href="#" class="list-group-item list-group-item-success" data-file-id="${file.id}">
                                 <span class="badge alert-success pull-right">Download</span>
-                                <c:out value="${file.fileName}"/>
+                                <span><c:out value="${file.fileName}"/></span>
                             </a>
                         </c:forEach>
                     </div>

@@ -1,6 +1,7 @@
 package com.maks.controller;
 
 import com.maks.entity.File;
+import com.maks.service.AmazonCloudWatchService;
 import com.maks.service.AmazonS3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,9 @@ public class AwsFileUploadController {
 
     @Autowired
     private AmazonS3Service amazonS3Service;
+
+    @Autowired
+    private AmazonCloudWatchService amazonCloudWatchService;
 
     @GetMapping("/")
     public ModelAndView listFiles() {
