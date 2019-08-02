@@ -58,18 +58,16 @@ public class AmazonCloudWatchServiceImpl implements AmazonCloudWatchService {
 
     private MetricDataQuery prepareMetricQuery(MetricStat metricStat) {
         return new MetricDataQuery()
-                .withId("M1")
+                .withId("m17")
                 .withMetricStat(metricStat)
                 .withReturnData(true);
     }
 
     private GetMetricDataRequest prepareMetricRequest(MetricDataQuery metricQuery) {
-        Date now = new Date();
-
         return new GetMetricDataRequest()
                     .withMetricDataQueries(Collections.singleton(metricQuery))
-                    .withStartTime(now)
-                    .withEndTime(now);
+                    .withStartTime(new Date())
+                    .withEndTime(new Date());
     }
 
 }
