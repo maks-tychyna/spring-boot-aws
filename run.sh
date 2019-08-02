@@ -1,3 +1,5 @@
+#!/bin/bash
+
 git reset --hard
 git fetch origin
 git checkout origin/master

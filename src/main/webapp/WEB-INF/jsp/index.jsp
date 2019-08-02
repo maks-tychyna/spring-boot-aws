@@ -13,10 +13,10 @@
 <body>
 
 <style type="text/css">
-    .html {
+    html {
         background-image: url(https://store-images.s-microsoft.com/image/apps.60733.9007199266244048.3346be15-f4a7-4b2f-956a-5ab635e87d5f.24cc3ea3-c887-4873-812a-23604ff34375);
         background-size: cover;
-        background-position-y: -90%;
+        background-position-y: -80%;
     }
 
     .container {
@@ -77,7 +77,6 @@
                 return false;
             }
 
-            $('#js-upload-files-input').attr('disabled', 'disabled');
             $('#js-upload-files').attr('disabled', 'disabled').text('Please wait');
             return true;
         });
