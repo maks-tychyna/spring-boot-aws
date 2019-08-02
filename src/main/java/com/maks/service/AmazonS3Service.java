@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface AmazonS3Service {
 
+    Long getBucketSize();
+
     InputStream downloadFile(Long fileId);
 
     void storeFile(MultipartFile multipartFile);

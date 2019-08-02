@@ -49,7 +49,7 @@
 
             <c:if test="${not empty files}">
                 <div class="processed-files">
-                    <h3>Uploaded files</h3>
+                    <h3>Uploaded files (${bucketSize} bytes)</h3>
                     <div class="list-group">
                         <c:forEach var="file" items="${files}">
                             <a href="#" class="list-group-item list-group-item-success" data-file-id="${file.id}">

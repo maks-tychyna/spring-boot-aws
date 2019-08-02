@@ -1,10 +1,7 @@
 package com.maks.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
 import com.maks.service.AmazonS3Service;
@@ -19,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,6 +39,17 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     @Override
     public List<File> getAllFiles() {
         return fileRepository.findAll();
+    }
+
+    @Override
+    public Long getBucketSize() {
+        List<S3ObjectSummary> objectSummaries = Optional.of(bucketName)
+                                                        .map(amazonS3Client::listObjects)
+                                                        .map(ObjectListing::getObjectSummaries)
+                                                        .orElseThrow(IllegalArgumentException::new);
+        return objectSummaries.stream()
+                              .mapToLong(S3ObjectSummary::getSize)
+                              .sum();
     }
 
     @Override
