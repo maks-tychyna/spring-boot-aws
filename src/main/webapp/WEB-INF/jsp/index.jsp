@@ -13,12 +13,17 @@
 <body>
 
 <style type="text/css">
+    .html {
+        background-image: url(https://store-images.s-microsoft.com/image/apps.60733.9007199266244048.3346be15-f4a7-4b2f-956a-5ab635e87d5f.24cc3ea3-c887-4873-812a-23604ff34375);
+        background-size: cover;
+        background-position-y: -90%;
+    }
+
     .container {
         padding-right: 10%;
         padding-left: 10%;
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 10%;
         width: 100%;
     }
 
@@ -65,7 +70,13 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#js-upload-submit').on('submit', function() {
+        $('#js-upload-submit').on('submit', function(e) {
+            if (!$('#js-upload-files-input').val()) {
+                e.preventDefault();
+                alert('Please select files to upload.');
+                return false;
+            }
+
             $('#js-upload-files-input').attr('disabled', 'disabled');
             $('#js-upload-files').attr('disabled', 'disabled').text('Please wait');
             return true;
