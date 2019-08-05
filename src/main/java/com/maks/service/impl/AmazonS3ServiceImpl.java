@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.*;
 import com.maks.entity.File;
 import com.maks.repository.FileRepository;
 import com.maks.service.AmazonS3Service;
-import com.maks.service.AmazonSesService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +26,6 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
     @Autowired
     private AmazonS3 amazonS3Client;
-
-    @Autowired
-    private AmazonSesService amazonSesService;
 
     @Autowired
     private FileRepository fileRepository;
@@ -64,11 +60,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
         Optional.of(multipartFile)
                 .map(File::new)
                 .map(fileRepository::save)
-                .ifPresent(storedFile -> {
-                    putToBucket(storedFile, multipartFile);
-                    amazonSesService.sendMail("File '" + storedFile.getFileName() + "' was uploaded. " +
-                            "Bucket size now is " + getBucketSize() + " bytes.");
-                });
+                .ifPresent(storedFile -> putToBucket(storedFile, multipartFile));
     }
 
     @SneakyThrows
