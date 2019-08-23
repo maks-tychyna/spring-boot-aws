@@ -1,10 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Parameters:
-  JASYPT_ENCRYPTOR_PASSWORD:
-    Description: JASYPT_ENCRYPTOR_PASSWORD
-    Type: String
-
 Resources:
   EC2Instance:
     Type: 'AWS::EC2::Instance'
@@ -26,7 +21,7 @@ Resources:
           git clone https://github.com/maks-tychyna/spring-boot-aws.git
           cd spring-boot-aws
           mvn clean package
-          java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djasypt.encryptor.password=${JASYPT_ENCRYPTOR_PASSWORD} target/spring-boot-aws.jar
+          java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djasypt.encryptor.password=${JasyptEncryptorPassword} target/spring-boot-aws.jar
 
   EC2InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
