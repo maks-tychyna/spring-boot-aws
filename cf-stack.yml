@@ -13,40 +13,40 @@ Resources:
       ImageId: ami-0b898040803850657
       InstanceType: t2.micro
       KeyName: EC2KeyPair
-      SecurityGroups:
-        - Ref: EC2InstanceSecurityGroup
+#      SecurityGroups:
+#        - Ref: EC2InstanceSecurityGroup
       UserData:
         'Fn::Base64': !Sub |
           #!/bin/bash
           echo ${JasyptEncryptorPassword} > myfile.txt
 
-  EC2InstanceSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: SSH, HTTP
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: '8080'
-          ToPort: '8080'
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: '8000'
-          ToPort: '8000'
-          CidrIp: 0.0.0.0/0
+#  EC2InstanceSecurityGroup:
+#    Type: 'AWS::EC2::SecurityGroup'
+#    Properties:
+#      GroupDescription: SSH, HTTP
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: '22'
+#          ToPort: '22'
+#          CidrIp: 0.0.0.0/0
+#        - IpProtocol: tcp
+#          FromPort: '8080'
+#          ToPort: '8080'
+#          CidrIp: 0.0.0.0/0
+#        - IpProtocol: tcp
+#          FromPort: '8000'
+#          ToPort: '8000'
+#          CidrIp: 0.0.0.0/0
 
-  RDSSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Aurora
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '3306'
-          ToPort: '3306'
-          CidrIp: 0.0.0.0/0
+#  RDSSecurityGroup:
+#    Type: 'AWS::EC2::SecurityGroup'
+#    Properties:
+#      GroupDescription: Aurora
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: '3306'
+#          ToPort: '3306'
+#          CidrIp: 0.0.0.0/0
 
 
 Outputs:
