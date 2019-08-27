@@ -18,15 +18,17 @@ Resources:
       UserData:
         'Fn::Base64': !Sub |
           #!/bin/bash
-          yum install -y java-1.8.0-openjdk
+          yum install -y java-1.8.0-openjdk-devel
           wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
           sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
           yum install -y apache-maven
           yum install -y git
+          cd home/ec2-user
           git clone https://github.com/maks-tychyna/spring-boot-aws.git
           cd spring-boot-aws
           mvn clean package
-          java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djasypt.encryptor.password=${JasyptEncryptorPassword} target/spring-boot-aws.jar
+          export JASYPT_ENCRYPTOR_PASSWORD="${JasyptEncryptorPassword}"
+          java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 target/spring-boot-aws.jar
 
   EC2InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
