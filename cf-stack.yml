@@ -6,52 +6,72 @@ Parameters:
     Type: String
 
 Resources:
-#  EC2Instance:
-#    Type: 'AWS::EC2::Instance'
-#    Properties:
-#      AvailabilityZone: us-east-1a
-#      ImageId: ami-0b898040803850657
-#      InstanceType: t2.micro
-#      KeyName: EC2KeyPair
-##      SecurityGroups:
-##        - Ref: EC2InstanceSecurityGroup
-#      UserData:
-#        'Fn::Base64': !Sub |
-#          #!/bin/bash
-#          echo "${JasyptEncryptorPassword}" > myfile.txt
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      AvailabilityZone: us-east-1a
+      ImageId: ami-0b898040803850657
+      InstanceType: t2.micro
+      KeyName: EC2KeyPair
+      SecurityGroups:
+        - Ref: EC2InstanceSecurityGroup
+      UserData:
+        'Fn::Base64': !Sub |
+          #!/bin/bash
+          yum install -y java-1.8.0-openjdk
+          wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+          sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+          yum install -y apache-maven
+          yum install -y git
+          git clone https://github.com/maks-tychyna/spring-boot-aws.git
+          cd spring-boot-aws
+          mvn clean package
+          java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djasypt.encryptor.password=${JasyptEncryptorPassword} target/spring-boot-aws.jar
 
-#  EC2InstanceSecurityGroup:
-#    Type: 'AWS::EC2::SecurityGroup'
-#    Properties:
-#      GroupDescription: SSH, HTTP
-#      SecurityGroupIngress:
-#        - IpProtocol: tcp
-#          FromPort: '22'
-#          ToPort: '22'
-#          CidrIp: 0.0.0.0/0
-#        - IpProtocol: tcp
-#          FromPort: '8080'
-#          ToPort: '8080'
-#          CidrIp: 0.0.0.0/0
-#        - IpProtocol: tcp
-#          FromPort: '8000'
-#          ToPort: '8000'
-#          CidrIp: 0.0.0.0/0
-
-  testRDSSecurityGroup:
+  EC2InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupDescription: Aurora
+      GroupDescription: SSH, HTTP
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '3306'
-          ToPort: '3306'
+          FromPort: '22'
+          ToPort: '22'
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '8080'
+          ToPort: '8080'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '8000'
+          ToPort: '8000'
+          CidrIp: 0.0.0.0/0
+
+#  RDSSecurityGroup:
+#    Type: 'AWS::EC2::SecurityGroup'
+#    Properties:
+#      GroupDescription: Aurora
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: '3306'
+#          ToPort: '3306'
+#          CidrIp: 0.0.0.0/0
 
 
 Outputs:
-  Jasypt:
-    Description: Jasypt password
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
     Value:
-      Ref: JasyptEncryptorPassword
+      Ref: EC2Instance
+  PublicDNS:
+    Description: Public DNSName of the newly created EC2 instance
+    Value:
+      'Fn::GetAtt':
+        - EC2Instance
+        - PublicDnsName
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value:
+      'Fn::GetAtt':
+        - EC2Instance
+        - PublicIp
 
