@@ -6,19 +6,19 @@ Parameters:
     Type: String
 
 Resources:
-  EC2Instance:
-    Type: 'AWS::EC2::Instance'
-    Properties:
-      AvailabilityZone: us-east-1a
-      ImageId: ami-0b898040803850657
-      InstanceType: t2.micro
-      KeyName: EC2KeyPair
-#      SecurityGroups:
-#        - Ref: EC2InstanceSecurityGroup
-      UserData:
-        'Fn::Base64': !Sub |
-          #!/bin/bash
-          echo ${JasyptEncryptorPassword} > myfile.txt
+#  EC2Instance:
+#    Type: 'AWS::EC2::Instance'
+#    Properties:
+#      AvailabilityZone: us-east-1a
+#      ImageId: ami-0b898040803850657
+#      InstanceType: t2.micro
+#      KeyName: EC2KeyPair
+##      SecurityGroups:
+##        - Ref: EC2InstanceSecurityGroup
+#      UserData:
+#        'Fn::Base64': !Sub |
+#          #!/bin/bash
+#          echo "${JasyptEncryptorPassword}" > myfile.txt
 
 #  EC2InstanceSecurityGroup:
 #    Type: 'AWS::EC2::SecurityGroup'
@@ -38,32 +38,20 @@ Resources:
 #          ToPort: '8000'
 #          CidrIp: 0.0.0.0/0
 
-#  RDSSecurityGroup:
-#    Type: 'AWS::EC2::SecurityGroup'
-#    Properties:
-#      GroupDescription: Aurora
-#      SecurityGroupIngress:
-#        - IpProtocol: tcp
-#          FromPort: '3306'
-#          ToPort: '3306'
-#          CidrIp: 0.0.0.0/0
+  testRDSSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Aurora
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp: 0.0.0.0/0
 
 
 Outputs:
-  InstanceId:
-    Description: InstanceId of the newly created EC2 instance
+  Jasypt:
+    Description: Jasypt password
     Value:
-      Ref: EC2Instance
-  PublicDNS:
-    Description: Public DNSName of the newly created EC2 instance
-    Value:
-      'Fn::GetAtt':
-        - EC2Instance
-        - PublicDnsName
-  PublicIP:
-    Description: Public IP address of the newly created EC2 instance
-    Value:
-      'Fn::GetAtt':
-        - EC2Instance
-        - PublicIp
+      Ref: JasyptEncryptorPassword
 
