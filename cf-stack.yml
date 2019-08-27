@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 
+Parameters:
+  JasyptEncryptorPassword:
+    Description: JasyptEncryptorPassword
+    Type: String
+
 Resources:
   EC2Instance:
     Type: 'AWS::EC2::Instance'
