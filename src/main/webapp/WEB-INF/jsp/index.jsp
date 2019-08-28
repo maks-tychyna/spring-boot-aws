@@ -35,7 +35,7 @@
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Upload Files</strong> <small>to AWS S3</small></div>
+        <div class="panel-heading"><strong>Upload Files</strong> <small>to AWS S3 Bucket</small></div>
         <div class="panel-body">
 
             <h4>Select files from your computer and click Upload</h4>
